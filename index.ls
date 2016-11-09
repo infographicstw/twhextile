@@ -132,11 +132,15 @@ tilemap.hexagon = do
 angular.module \main, <[]>
   ..controller \main, <[$scope $timeout]> ++ ($scope,$timeout) ->
     $scope.counties = []
+    if document.body.getBoundingClientRect!width > 640 => $scope.showConfig = true
+
     d3.json \twCounty2015.topo.json, (topo) ->
       svg = d3.select \#svg
       color = d3.scale.category20!
       box = svg.0.0.getBoundingClientRect!
-      proj = d3.geo.mercator!center([121,23.6]).scale(7000).translate([box.width/2,box.height/2])
+      [rx, ry] = [box.width * 17, box.height * 13]
+      rate = if rx > ry => ry else rx
+      proj = d3.geo.mercator!center([121,23.6]).scale(rate).translate([box.width/2,box.height/2])
       proj2 = (coord)->
         if coord.1 > 25.5 => coord.1 -= 1
         if coord.0 < 119 => coord.0 += 1.2
@@ -195,3 +199,4 @@ angular.module \main, <[]>
           $scope.handler = null
         ), 100
       , true
+      $scope.$watch 'showConfig', -> $timeout (->$scope.handle!), 10

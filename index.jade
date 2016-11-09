@@ -33,15 +33,18 @@ html(lang="en")
     script(type="text/javascript",src="index.js")
 
   body(ng-app="main",ng-controller="main")
-    svg#svg(width="50%",height="600px",style="position:absolute;top:0;left:0")
-    div(style="position:absolute;top:0;left:50%;height:100%;width:50%")
+    svg#svg
+    #toggler.btn.btn-default(ng-click="showConfig=!!!showConfig") Edit Data
+    #config(ng-show="showConfig",ng-cloak)
       h3 台灣縣市六角統計地圖
       .counties(ng-repeat="county in counties")
         .input-group
           span.input-group-addon {{county.name}}
           input.form-control.input-sm(ng-model="county.value")
       hr
-      small 註: 1: 極端狀況無法正確顯示(缺值、比例過大或過小).  2: 可能由於 d3-cartogram 的 bug, 連江縣比例無法正確顯示
+      small
+        div 註: 1: 極端狀況無法正確顯示(缺值、比例過大或過小).
+        div &nbsp; &nbsp; &nbsp;&nbsp;2: 可能由於 d3-cartogram 的 bug, 連江縣比例無法正確顯示
       .pull-right 
 
     div(style="position:fixed;bottom:0;left:0;width:100%")
